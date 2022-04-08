@@ -1,0 +1,129 @@
+/*!
+    \module QtVncClient
+    \title Qt VNC Client
+    \ingroup modules
+    \brief Provides classes for implementing VNC client applications.
+
+    The Qt VNC Client module provides functionality to connect to VNC servers,
+    retrieve framebuffer data, and send input events. It implements the VNC (Virtual
+    Network Computing) protocol, which enables viewing and interacting with remote
+    desktop environments.
+
+    \section1 Overview
+
+    The VNC protocol enables a client to connect to a remote server and view
+    its desktop, as well as control it using keyboard and mouse input. The QtVncClient
+    module provides a Qt-based implementation of the client side of the VNC protocol.
+
+    Key features include:
+    \list
+    \li Connection and handshaking with VNC servers
+    \li Multiple protocol version support
+    \li Framebuffer updates processing with various encoding types
+    \li Input event forwarding (keyboard and mouse)
+    \li Efficient image handling using Qt's image processing capabilities
+    \endlist
+
+    \section1 Classes
+
+    \annotatedlist vncclient
+
+    \section1 Usage Example
+
+    The following example demonstrates a simple application that connects to a VNC server:
+
+    \code
+    #include <QtVncClient/QVncClient>
+    #include <QtWidgets/QApplication>
+    #include <QtWidgets/QLabel>
+    #include <QtNetwork/QTcpSocket>
+
+    class VncViewer : public QLabel
+    {
+        Q_OBJECT
+    public:
+        VncViewer(QWidget *parent = nullptr)
+            : QLabel(parent)
+            , m_client(new QVncClient(this))
+        {
+            // Set up socket
+            QTcpSocket *socket = new QTcpSocket(this);
+            m_client->setSocket(socket);
+            
+            // Connect to signals
+            connect(m_client, &QVncClient::imageChanged, this, &VncViewer::updateImage);
+            connect(m_client, &QVncClient::framebufferSizeChanged, 
+                    this, &VncViewer::resizeToFramebuffer);
+        }
+        
+        void connectToHost(const QString &host, quint16 port = 5900)
+        {
+            m_client->socket()->connectToHost(host, port);
+        }
+        
+    protected:
+        // Forward input events to the VNC server
+        void keyPressEvent(QKeyEvent *event) override
+        {
+            m_client->handleKeyEvent(event);
+        }
+        
+        void keyReleaseEvent(QKeyEvent *event) override
+        {
+            m_client->handleKeyEvent(event);
+        }
+        
+        void mouseMoveEvent(QMouseEvent *event) override
+        {
+            m_client->handlePointerEvent(event);
+        }
+        
+        void mousePressEvent(QMouseEvent *event) override
+        {
+            m_client->handlePointerEvent(event);
+        }
+        
+        void mouseReleaseEvent(QMouseEvent *event) override
+        {
+            m_client->handlePointerEvent(event);
+        }
+        
+    private slots:
+        void updateImage(const QRect &rect)
+        {
+            setPixmap(QPixmap::fromImage(m_client->image()));
+        }
+        
+        void resizeToFramebuffer(int width, int height)
+        {
+            resize(width, height);
+            setPixmap(QPixmap::fromImage(m_client->image()));
+        }
+        
+    private:
+        QVncClient *m_client;
+    };
+
+    int main(int argc, char *argv[])
+    {
+        QApplication app(argc, argv);
+        
+        VncViewer viewer;
+        viewer.connectToHost("localhost");
+        viewer.show();
+        
+        return app.exec();
+    }
+    \endcode
+
+    \section1 Thread Safety
+
+    The QtVncClient classes are not thread-safe. They should be used from the main
+    thread or a single thread.
+
+    \section1 License Information
+
+    Qt VNC Client is available under the commercial Qt license 
+    and under the GNU Lesser General Public License v3, GNU General Public License v2,
+    or GNU General Public License v3.
+*/

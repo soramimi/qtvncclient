@@ -1,0 +1,45 @@
+/*!
+    \headerfile <QtVncClient/qtvncclientglobal.h>
+    \title Qt VNC Client Global Definitions
+    \inmodule QtVncClient
+    \brief Provides global definitions for the Qt VNC Client module.
+
+    This header file defines global macros, namespaces, and type definitions 
+    used throughout the QtVncClient module. It should be included by all other
+    headers in the module.
+
+    \sa QtVncClient
+*/
+
+/*!
+    \macro Q_VNCCLIENT_EXPORT
+    \relates <QtVncClient/qtvncclientglobal.h>
+    \brief Expands to the appropriate export declaration for Qt VNC Client library symbols.
+
+    This macro is used to export symbols from the Qt VNC Client library when building,
+    and to import those symbols when using the library.
+*/
+
+/*!
+    \relates <QtVncClient/qtvncclientglobal.h>
+    \variable lcVncClient
+    \brief The logging category for VNC client operations.
+
+    The lcVncClient logging category provides debug, warning, and information messages
+    for operations related to VNC connections, protocol handling, and data processing.
+
+    Example usage:
+    \code
+    qCDebug(lcVncClient) << "Connecting to VNC server at" << hostname << ":" << port;
+    \endcode
+
+    To enable debug output, set the QT_LOGGING_RULES environment variable:
+    \code
+    QT_LOGGING_RULES="qt.vncclient.debug=true"
+    \endcode
+
+    The category is defined with the following name:
+    \code
+    Q_LOGGING_CATEGORY(lcVncClient, "qt.vncclient")
+    \endcode
+*/

@@ -1,0 +1,232 @@
+/*!
+    \class QVncClient
+    \inmodule QtVncClient
+    \ingroup network
+    \brief Provides a client implementation for the VNC (Virtual Network Computing) protocol.
+
+    QVncClient allows applications to connect to VNC servers, receive framebuffer
+    updates, and send input events such as keyboard and mouse interactions.
+    It handles the various stages of the VNC protocol, including handshaking,
+    authentication, and framebuffer updates.
+
+    \section1 VNC Protocol Support
+
+    This implementation supports:
+    \list
+    \li VNC Protocol version 3.3 (legacy)
+    \li Basic security types (None authentication)
+    \li Raw, Hextile, and ZRLE encoding methods
+    \li Keyboard and pointer (mouse) event handling
+    \endlist
+
+    \section1 Example Usage
+
+    \code
+    QTcpSocket *socket = new QTcpSocket(this);
+    socket->connectToHost("vnc-server.example.com", 5900);
+
+    QVncClient *vncClient = new QVncClient(this);
+    vncClient->setSocket(socket);
+
+    // Connect to signals to handle events
+    connect(vncClient, &QVncClient::framebufferSizeChanged, this, &MyWidget::handleFramebufferResize);
+    connect(vncClient, &QVncClient::imageChanged, this, &MyWidget::handleImageUpdate);
+    \endcode
+
+    Once connected, you can access the current framebuffer image and forward input events:
+
+    \code
+    // Get the current image
+    QImage currentImage = vncClient->image();
+    
+    // Forward input events
+    void MyWidget::keyPressEvent(QKeyEvent *event)
+    {
+        vncClient->handleKeyEvent(event);
+    }
+    
+    void MyWidget::mouseMoveEvent(QMouseEvent *event)
+    {
+        vncClient->handlePointerEvent(event);
+    }
+    \endcode
+
+    \sa QTcpSocket
+*/
+
+/*!
+    \enum QVncClient::ProtocolVersion
+    \brief Represents the VNC protocol version.
+
+    \value ProtocolVersionUnknown
+           Unknown or unsupported protocol version.
+    \value ProtocolVersion33
+           VNC protocol version 3.3.
+    \value ProtocolVersion37
+           VNC protocol version 3.7.
+    \value ProtocolVersion38
+           VNC protocol version 3.8.
+*/
+
+/*!
+    \enum QVncClient::SecurityType
+    \brief Represents the security type used for authentication.
+
+    \value SecurityTypeUnknwon
+           Unknown security type.
+    \value SecurityTypeInvalid
+           Invalid security type.
+    \value SecurityTypeNone
+           No authentication required.
+    \value SecurityTypeVncAuthentication
+           Standard VNC authentication (password-based).
+    \value SecurityTypeRA2
+           RSA-based security authentication.
+    \value SecurityTypeRA2ne
+           RSA-based security authentication.
+    \value SecurityTypeTight
+           Tight-specific authentication.
+    \value SecurityTypeUltra
+           UltraVNC-specific authentication.
+    \value SecurityTypeTLS
+           TLS security type.
+    \value SecurityTypeVeNCrypt
+           VeNCrypt security type.
+    \value SecurityTypeGtkVncSasl
+           SASL authentication used by GTK-VNC.
+    \value SecurityTypeMd5HashAuthentication
+           MD5 hash authentication.
+    \value SecurityTypeColinDeanXvp
+           Colin Dean XVP authentication.
+*/
+
+/*!
+    \property QVncClient::socket
+    \brief The TCP socket used for the VNC connection.
+    
+    Set this property to establish a connection to a VNC server.
+    The socket should already be connected to the VNC server host
+    before being assigned to this property.
+*/
+
+/*!
+    \property QVncClient::protocolVersion
+    \brief The negotiated VNC protocol version.
+    
+    This property is updated automatically after connecting to a VNC server
+    and completing the protocol handshake. It is read-only from the application side.
+*/
+
+/*!
+    \property QVncClient::securityType
+    \brief The negotiated security type for the VNC connection.
+    
+    This property is updated automatically after connecting to a VNC server
+    and completing the protocol handshake. It is read-only from the application side.
+*/
+
+/*!
+    \fn QVncClient::QVncClient(QObject *parent)
+    \brief Constructs a VNC client with the given \a parent.
+*/
+
+/*!
+    \fn QVncClient::~QVncClient()
+    \brief Destroys the VNC client.
+*/
+
+/*!
+    \fn int QVncClient::framebufferWidth() const
+    \brief Returns the width of the remote framebuffer in pixels.
+    
+    This value is available after successful connection to a VNC server
+    and completion of the initialization phase.
+    
+    \return The width of the remote framebuffer.
+*/
+
+/*!
+    \fn int QVncClient::framebufferHeight() const
+    \brief Returns the height of the remote framebuffer in pixels.
+    
+    This value is available after successful connection to a VNC server
+    and completion of the initialization phase.
+    
+    \return The height of the remote framebuffer.
+*/
+
+/*!
+    \fn QImage QVncClient::image() const
+    \brief Returns the current framebuffer image.
+    
+    This image represents the current state of the remote desktop.
+    It is updated each time framebuffer updates are received from the server.
+    
+    \return A QImage containing the current framebuffer contents.
+*/
+
+/*!
+    \fn void QVncClient::handleKeyEvent(QKeyEvent *e)
+    \brief Handles a keyboard event and sends it to the VNC server.
+    
+    This method should be called when keyboard events occur in the client
+    application that should be forwarded to the remote VNC server.
+    
+    \param e The keyboard event to be forwarded.
+*/
+
+/*!
+    \fn void QVncClient::handlePointerEvent(QMouseEvent *e)
+    \brief Handles a mouse event and sends it to the VNC server.
+    
+    This method should be called when mouse events occur in the client
+    application that should be forwarded to the remote VNC server.
+    
+    \param e The mouse event to be forwarded.
+*/
+
+/*!
+    \fn void QVncClient::socketChanged(QTcpSocket *socket)
+    \brief This signal is emitted when the socket property changes.
+    \param socket The new socket.
+*/
+
+/*!
+    \fn void QVncClient::protocolVersionChanged(ProtocolVersion protocolVersion)
+    \brief This signal is emitted when the protocol version is determined.
+    \param protocolVersion The negotiated protocol version.
+*/
+
+/*!
+    \fn void QVncClient::securityTypeChanged(SecurityType securityType)
+    \brief This signal is emitted when the security type is determined.
+    \param securityType The negotiated security type.
+*/
+
+/*!
+    \fn void QVncClient::framebufferSizeChanged(int width, int height)
+    \brief This signal is emitted when the framebuffer size changes.
+    
+    This typically occurs when first connecting to the VNC server,
+    or if the remote desktop is resized.
+    
+    \param width The new width of the framebuffer.
+    \param height The new height of the framebuffer.
+*/
+
+/*!
+    \fn void QVncClient::imageChanged(const QRect &rect)
+    \brief This signal is emitted when a portion of the framebuffer image changes.
+    
+    The application should update its display of the framebuffer
+    in the specified rectangle.
+    
+    \param rect The rectangle that has been updated.
+*/
+
+/*!
+    \fn void QVncClient::connectionStateChanged(bool connected)
+    \brief This signal is emitted when the connection state changes.
+    
+    \param connected true if connected to the VNC server, false if disconnected.
+*/

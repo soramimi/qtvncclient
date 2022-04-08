@@ -1,0 +1,80 @@
+project                 = QtVncClient
+description            = Qt VNC Client Reference Documentation
+version                = 1.0.0
+
+# The following parameters are used to specify the location of the project's
+# source code relative to the project root directory.
+
+sourcedirs             = .
+headerdirs             = .
+exampledirs            = ../../examples/vncclient
+
+# Exclude private headers and implementation files from the documentation generation
+excludedirs            = */private
+
+# These settings override the defaults from qtgroupdoc.qdocconf
+
+qhp.projects            = QtVncClient
+qhp.QtVncClient.file         = qtvncclient.qhp
+qhp.QtVncClient.namespace    = org.qt-project.qtvncclient.100
+qhp.QtVncClient.virtualFolder = qtvncclient
+qhp.QtVncClient.indexTitle    = Qt VNC Client
+qhp.QtVncClient.indexRoot     =
+
+qhp.QtVncClient.filterAttributes                  = qtvncclient 1.0.0 qt6
+qhp.QtVncClient.customFilters.Qt.name             = Qt VNC Client 1.0.0
+qhp.QtVncClient.customFilters.Qt.filterAttributes = qtvncclient 1.0.0
+
+qhp.QtVncClient.subprojects                    = classes
+qhp.QtVncClient.subprojects.classes.title      = C++ Classes
+qhp.QtVncClient.subprojects.classes.indexTitle = Qt VNC Client C++ Classes
+qhp.QtVncClient.subprojects.classes.selectors  = class fake:headerfile
+qhp.QtVncClient.subprojects.classes.sortPages  = true
+
+# Define the location of the output directory
+outputdir     = ../../doc/qtvncclient
+
+# Add extra warning tags for incomplete and internal documentation errors
+warninglimit  = 0
+
+# Set language and encoding
+language      = Cpp
+naturallanguage = en
+outputencoding = UTF-8
+sourceencoding = UTF-8
+
+# Generate diagrams for Qt classes
+diagrams      = true
+
+# Add support for table of contents and index entries
+generateindex = true
+
+# Set the module for the documentation
+moduleheader  = QtVncClient
+
+# Add module macros for linking to external Qt modules
+macro.QT      = "\\\\QtCore"
+macro.QT5     = "\\\\QtGui"
+macro.QT6     = "\\\\QtNetwork"
+
+# Define URL shortcuts for cross-referencing Qt documentation
+manifestmeta.thumbnail.names                = "QtVncClient/Qt VNC Client Example"
+
+# Group definitions for organizing classes and examples
+group.vncclient.title                       = Qt VNC Client Classes
+group.vncclient.prefix                      = QVnc
+group.vncclient.divider                     = 
+
+# Example groups
+group.qt-vnc-client-examples.title          = Qt VNC Client Examples
+group.qt-vnc-client-examples.prefix         = 
+group.qt-vnc-client-examples.divider        = 
+
+navigation.landingpage = "Qt VNC Client"
+navigation.cppclassespage = "Qt VNC Client C++ Classes"
+
+# Define C++ syntax highlighting for code snippets
+highlightingmarkup = true
+
+# Include the standard qdoc configuration for Qt modules
+include(../../doc/global/qt-module-defaults.qdocconf)

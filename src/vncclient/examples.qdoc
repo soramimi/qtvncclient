@@ -1,0 +1,80 @@
+/*!
+    \page qtvncclient-examples.html
+    \title Qt VNC Client Examples
+    \brief Examples demonstrating the usage of the Qt VNC Client module
+    \ingroup all-examples
+    \ingroup qt-vnc-client-examples
+    \inmodule QtVncClient
+
+    The Qt VNC Client module provides classes for implementing applications
+    that connect to VNC servers. This page lists the examples that demonstrate
+    how to use the module's API.
+
+    \section1 Simple VNC Client
+
+    \image vncwidget-screenshot.png
+
+    The simple VNC client example demonstrates how to create a basic VNC viewer 
+    using the QVncClient class. It shows:
+
+    \list
+    \li How to establish a connection to a VNC server
+    \li How to display the remote desktop in a Qt widget
+    \li How to forward input events to the VNC server
+    \li How to handle framebuffer updates efficiently
+    \endlist
+
+    \section2 Example Code
+
+    The main components of the example are:
+
+    \list
+    \li VncWidget - A QWidget subclass that displays a VNC connection
+    \li MainWindow - Contains the VNC widget and UI controls for connection management
+    \endlist
+
+    The VncWidget class handles the interaction with the QVncClient:
+
+    \snippet vncclient/vncwidget.cpp vncwidget-class
+
+    Connection to a VNC server is established using a QTcpSocket:
+
+    \snippet vncclient/vncwidget.cpp connect-to-server
+
+    Framebuffer updates are handled by connecting to the appropriate signals:
+
+    \snippet vncclient/vncwidget.cpp handle-updates
+
+    Input events are forwarded to the VNC server:
+
+    \snippet vncclient/vncwidget.cpp input-events
+
+    \section1 Advanced VNC Client Features
+
+    The following features can be implemented using the Qt VNC Client module:
+
+    \list
+    \li Password authentication
+    \li Clipboard sharing
+    \li File transfer (where supported by the server)
+    \li Advanced input handling (keyboard shortcuts, etc.)
+    \li Multiple connections in tabs or windows
+    \li Connection profiles management
+    \endlist
+
+    These features would build upon the basic functionality demonstrated in the
+    simple VNC client example.
+
+    \section1 Running the Examples
+
+    To build and run the examples:
+
+    \code
+    cd examples/vncclient
+    cmake -B build
+    cmake --build build
+    ./build/vncclient
+    \endcode
+
+    \sa {Qt VNC Client Module}{Qt VNC Client}
+*/
