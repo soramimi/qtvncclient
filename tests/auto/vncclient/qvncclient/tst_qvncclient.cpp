@@ -492,6 +492,10 @@ void tst_qvncclient::testZRLEEncoding()
 void tst_qvncclient::testTightEncoding()
 {
     // Skip test if no server was started
+#ifndef USE_ZLIB
+    QSKIP("ZLIB support is not available, skipping Tight encoding test");
+#endif
+
     if (!server)
         QSKIP("No VNC server available");
 

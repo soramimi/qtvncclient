@@ -30,6 +30,7 @@ Current implementation provides:
 - Remote keyboard and mouse control
 - Raw encoding for framebuffer updates
 - Simple Qt widget interface
+- Optional ZLIB support for Tight and ZRLE encodings
 - Cross-platform compatibility
 
 See the [ROADMAP.md](ROADMAP.md) file for planned improvements and additional features.
@@ -42,6 +43,7 @@ See the [ROADMAP.md](ROADMAP.md) file for planned improvements and additional fe
 - Qt Widgets module
 - Qt Network module
 - CMake 3.16 or higher
+- ZLIB (optional, for Tight and ZRLE encodings)
 
 ### Build Steps with CMake
 
@@ -59,7 +61,15 @@ See the [ROADMAP.md](ROADMAP.md) file for planned improvements and additional fe
    make
    ```
 
-3. Run the example application:
+3. To build without ZLIB support:
+    ```
+    mkdir -p build/cline
+    cd build/cline
+    cmake ../.. -DVNCCLIENT_USE_ZLIB=OFF
+    make
+    ```
+
+4. Run the example application:
    ```
    build/cline/examples/vncclient/vnc-watcher
    ```

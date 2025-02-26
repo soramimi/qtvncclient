@@ -43,7 +43,10 @@
 #include <QtGui/QPainter>
 
 // Include for Tight encoding
+#ifdef USE_ZLIB
 #include <zlib.h>
+#endif
+
 #include <jpeglib.h>
 
 /*!
@@ -115,7 +118,9 @@ public:
         RRE = 2,         ///< Rise-and-Run-length Encoding
         Hextile = 5,     ///< Hextile encoding (divides rect into 16x16 tiles)
         ZRLE = 16,       ///< ZRLE (Zlib Run-Length Encoding)
+#ifdef USE_ZLIB
         Tight = 7,       ///< Tight encoding (with zlib compression and JPEG)
+#endif
     };
     
     /*!
@@ -144,13 +149,14 @@ public:
     */
     Private(QVncClient *parent);
 
+#ifdef USE_ZLIB
     /*!
         \internal
         \struct QVncClient::Private::TightData
         \brief Holds data for Tight encoding processing.
         
         This structure contains zlib streams and related configuration
-        data for handling Tight encoding.
+        data for handling Tight encoding. ZLIB support is optional.
     */
     struct TightData {
         z_stream zlibStream[4];      ///< Zlib streams for compression channels
@@ -177,6 +183,7 @@ public:
             }
         }
     };
+#endif
 
     /*!
         \internal
@@ -458,6 +465,7 @@ private:
     */
     void handleHextileEncoding(const Rectangle &rect);
     
+#ifdef USE_ZLIB
     /*!
         \internal
         \brief Handles tight-encoded rectangle data.
@@ -467,6 +475,7 @@ private:
         zlib compression, JPEG compression, or various other subencodings.
     */
     void handleTightEncoding(const Rectangle &rect);
+#endif
     
     /*!
         \internal
@@ -479,6 +488,7 @@ private:
     */
     bool handleTightJpeg(const Rectangle &rect, int dataLength);
     
+#ifdef USE_ZLIB
     /*!
         \internal
         \brief Decompresses zlib data for Tight encoding.
@@ -492,7 +502,8 @@ private:
         Decompresses zlib-compressed data for a Tight-encoded rectangle.
     */
     QByteArray decompressTightData(int streamId, const QByteArray &data, int expectedBytes);
-    
+#endif
+
     /*!
         \internal
         \brief Handles ZRLE-encoded rectangle data.
@@ -623,6 +634,7 @@ void QVncClient::Private::read()
     }
 }
 
+#ifdef USE_ZLIB
 /*!
     \internal
     Handles Tight-encoded rectangle data.
@@ -778,6 +790,7 @@ void QVncClient::Private::handleTightEncoding(const Rectangle &rect)
         }
     }
 }
+#endif
 
 /*!
     \internal
@@ -820,6 +833,7 @@ bool QVncClient::Private::handleTightJpeg(const Rectangle &rect, int dataLength)
     return true;
 }
 
+#ifdef USE_ZLIB
 /*!
     \internal
     Decompresses zlib data for Tight encoding.
@@ -851,6 +865,7 @@ QByteArray QVncClient::Private::decompressTightData(int streamId, const QByteArr
     
     return uncompressedData;
 }
+#endif
 
 /*!
     \internal
@@ -1093,7 +1108,17 @@ void QVncClient::Private::parserServerInit()
     state = WaitingState;
 
     setPixelFormat();
-    setEncodings({Tight, ZRLE, Hextile, RawEncoding});  // Add Tight as the first preferred encoding
+    
+    // Set supported encodings based on available libraries
+    const QList<qint32> encodings {
+        RawEncoding,
+        Hextile,
+        ZRLE,
+#ifdef USE_ZLIB
+        Tight,
+#endif
+    };
+    setEncodings(encodings);
     framebufferUpdateRequest(false);
 }
 
@@ -1195,9 +1220,11 @@ void QVncClient::Private::framebufferUpdate()
             case ZRLE:
                 handleZRLEEncoding(rect);
                 break;
+#ifdef USE_ZLIB
             case Tight:
                 handleTightEncoding(rect);
                 break;
+#endif
             case Hextile:
                 handleHextileEncoding(rect);
                 break;

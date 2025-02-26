@@ -9,12 +9,8 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
 #include <QtCore/QScopedPointer>
-#include <zlib.h>
 
 QT_BEGIN_NAMESPACE
-
-// Forward declaration for Private class
-class QJpegDecoder;
 
 class Q_VNCCLIENT_EXPORT QVncClient : public QObject
 {

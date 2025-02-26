@@ -11,6 +11,9 @@ project(QtVncClient
     LANGUAGES CXX C
 )
 
+# Option to enable ZLIB support (for Tight and ZRLE encoding)
+option(VNCCLIENT_USE_ZLIB "Enable ZLIB compression support" ON)
+
 find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS
     BuildInternals
     Gui

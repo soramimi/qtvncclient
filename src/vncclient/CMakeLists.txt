@@ -1,8 +1,16 @@
 # Copyright (C) 2025 Signal Slot Inc.
 # SPDX-License-Identifier: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-# Find required dependencies for Tight encoding
-find_package(ZLIB REQUIRED)
+# Option to enable ZLIB support (for Tight and ZRLE encoding)
+option(VNCCLIENT_USE_ZLIB "Enable ZLIB compression support" ON)
+
+# Find dependencies for Tight encoding
+if(VNCCLIENT_USE_ZLIB)
+    find_package(ZLIB)
+    if(ZLIB_FOUND)
+        add_definitions(-DUSE_ZLIB)
+    endif()
+endif()
 find_package(JPEG REQUIRED)
  
 qt_internal_add_module(VncClient
@@ -12,7 +20,6 @@ qt_internal_add_module(VncClient
         qtvncclientlogging.cpp
         qvncclient.h
     LIBRARIES
-        ZLIB::ZLIB
         JPEG::JPEG
     INCLUDE_DIRECTORIES
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -21,4 +28,9 @@ qt_internal_add_module(VncClient
         Qt::Network
         Qt::Gui
 )
+
+# Add ZLIB library if found
+if(VNCCLIENT_USE_ZLIB AND ZLIB_FOUND)
+    target_link_libraries(VncClient PRIVATE ZLIB::ZLIB)
+endif()
 
