@@ -519,7 +519,9 @@ private:
     QMap<int, quint32> keyMap;                  ///< Map from Qt keys to VNC key codes
 public:
     QTcpSocket *socket = nullptr;               ///< Socket for VNC communication
+#ifdef USE_ZLIB
     QScopedPointer<TightData> tightData;        ///< Data for Tight encoding
+#endif
     ProtocolVersion protocolVersion = ProtocolVersionUnknown; ///< Current protocol version
     SecurityType securityType = SecurityTypeUnknwon;         ///< Current security type
     QImage image;                               ///< Image containing the framebuffer
@@ -535,7 +537,9 @@ public:
 */
 QVncClient::Private::Private(QVncClient *parent)
     : q(parent)
+#ifdef USE_ZLIB
     , tightData(new TightData())
+#endif
 {
     const QList<quint32> keyList {
         // Key mappings
