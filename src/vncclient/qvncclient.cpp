@@ -47,8 +47,6 @@
 #include <zlib.h>
 #endif
 
-#include <jpeglib.h>
-
 /*!
     \internal
     \class QVncClient::Private

@@ -11,7 +11,6 @@ if(VNCCLIENT_USE_ZLIB)
         add_definitions(-DUSE_ZLIB)
     endif()
 endif()
-find_package(JPEG REQUIRED)
  
 qt_internal_add_module(VncClient
     SOURCES
@@ -19,8 +18,6 @@ qt_internal_add_module(VncClient
         qvncclient.cpp
         qtvncclientlogging.cpp
         qvncclient.h
-    LIBRARIES
-        JPEG::JPEG
     INCLUDE_DIRECTORIES
         ${CMAKE_CURRENT_SOURCE_DIR}
     PUBLIC_LIBRARIES
