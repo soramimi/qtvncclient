@@ -242,6 +242,8 @@ public:
     void pointerEvent(QMouseEvent *e);
 
 private:
+    void reset();
+
     /*!
         \internal
         \brief Checks if the connection to the server is valid.
@@ -582,6 +584,7 @@ QVncClient::Private::Private(QVncClient *parent)
         if (prev) {
             disconnect(prev, nullptr, q, nullptr);
         }
+        reset ();
 
         if (socket) {
             connect(socket, &QTcpSocket::connected, q, [this]() {
@@ -595,6 +598,8 @@ QVncClient::Private::Private(QVncClient *parent)
             connect(socket, &QTcpSocket::disconnected, q, [this, socket]() {
                 qCInfo(lcVncClient) << "Disconnected from VNC server";
                 emit q->connectionStateChanged(false);
+                
+                reset();
             });
             connect(socket, &QTcpSocket::readyRead, q, [this]() {
                 read();
@@ -609,6 +614,17 @@ QVncClient::Private::Private(QVncClient *parent)
     connect(q, &QVncClient::securityTypeChanged, q, [this](SecurityType securityType) {
         securityTypeChanged(securityType);
     });
+}
+
+void QVncClient::Private::reset()
+{
+    state = ProtocolVersionState;
+    q->setProtocolVersion(ProtocolVersionUnknown);
+    q->setSecurityType(SecurityTypeUnknwon);
+    frameBufferWidth = 0;
+    frameBufferHeight = 0;
+    image = QImage(); // Clear the image buffer
+    emit q->framebufferSizeChanged(0, 0);
 }
 
 /*!
