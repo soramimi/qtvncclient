@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QtVncClient/QVncClient>
+#include "qvncclient.h"
 #include "vncwidget.h"
 
 #include <QtCore/QDebug>

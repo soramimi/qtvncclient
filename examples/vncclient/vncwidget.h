@@ -5,7 +5,7 @@
 #define VNCWIDGET_H
 
 #include <QtWidgets/QWidget>
-#include <QtVncClient/QVncClient>
+#include "qvncclient.h"
 
 class QKeyEvent;
 class QMouseEvent;

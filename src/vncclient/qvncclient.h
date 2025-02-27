@@ -3,7 +3,7 @@
 #ifndef QVNCCLIENT_H
 #define QVNCCLIENT_H
 
-#include <QtVncClient/qtvncclientglobal.h>
+#include "qtvncclientglobal.h"
 #include <QtNetwork/QTcpSocket>
 #include <QtGui/QImage>
 #include <QtGui/QKeyEvent>
@@ -12,7 +12,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Q_VNCCLIENT_EXPORT QVncClient : public QObject
+class /*Q_VNCCLIENT_EXPORT*/ QVncClient : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QTcpSocket *socket READ socket WRITE setSocket NOTIFY socketChanged)

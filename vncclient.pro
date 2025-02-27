@@ -3,6 +3,7 @@ TEMPLATE = app
 QT += core gui widgets network
 
 INCLUDEPATH += examples/vncclient
+INCLUDEPATH += src/vncclient
 
 HEADERS += \
     src/vncclient/qtvncclientglobal.h \

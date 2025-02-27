@@ -8,7 +8,7 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qloggingcategory.h>
-#include <QtVncClient/qtvncclientexports.h>
+// #include <QtVncClient/qtvncclientexports.h>
 
 QT_BEGIN_NAMESPACE
 
