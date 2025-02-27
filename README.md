@@ -1,4 +1,4 @@
-# QtVnc Module
+# QtVncClient Module
 
 A Qt module that provides VNC (Virtual Network Computing) client functionality for Qt applications. This library enables Qt developers to easily integrate remote desktop viewing and control capabilities into their applications.
 
