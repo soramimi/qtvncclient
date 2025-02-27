@@ -64,6 +64,8 @@ MainWindow::Private::Private(::MainWindow *parent)
     connect(&timer, &QTimer::timeout, q, [this]() {
         socket.connectToHost(server->text(), port->value());
     });
+    if (socket.state() == QTcpSocket::UnconnectedState)
+        timer.start();
     
     // Connect watch button
     connect(watch, &QPushButton::clicked, q, [this]() {
