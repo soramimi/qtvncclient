@@ -77,6 +77,7 @@ MainWindow::Private::Private(::MainWindow *parent)
         stackedWidget->setCurrentIndex(1);
         vnc->setFocus();
         q->restoreGeometry(settings.value("large_geometry").toByteArray());
+        q->setWindowTitle(QString("%1:%2").arg(server->text()).arg(port->value()));
         settings.endGroup();
     });
 }
