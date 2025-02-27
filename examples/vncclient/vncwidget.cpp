@@ -66,9 +66,7 @@ void VncWidget::setClient(QVncClient *client)
     
     if (client) {
         connect(client, &QVncClient::framebufferSizeChanged, this, [this](int width, int height) {
-            setMinimumSize(width, height);
-            setMaximumSize(width, height);
-            resize(width, height);
+            setFixedSize(width, height);
             update();
         });
         
@@ -76,8 +74,10 @@ void VncWidget::setClient(QVncClient *client)
             update(rect);
         });
         
-        connect(client, &QVncClient::connectionStateChanged, this, [this](bool) {
-            update();
+        connect(client, &QVncClient::connectionStateChanged, this, [this](bool connected) {
+            repaint();
+            if (connected)
+                window()->raise();
         });
     }
     
